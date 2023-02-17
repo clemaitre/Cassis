@@ -1,0 +1,311 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<!-- ---------------------------------------------------------------------- -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<title>
+Cassis: Detection of genomic rearrangement breakpoints
+</title>
+</head>
+
+<body>
+<!-- ---------------------------------------------------------------------- -->
+<h2><b>Cassis:</b> <i>Detection of genomic rearrangement breakpoints</i>
+<br></h2>
+
+<!-- ---------------------------------------------------------------------- -->
+<hr><h3>Comparing Cassis with other methods for detecting breakpoints</b></h3>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Cassis</b> was used to process two
+different data sets obtained from Ensembl: a list of <a
+href="HumanVsMouse.html">one-to-one orthologous
+genes</a> and a list of <a href="CassisAndCompara.html">orthologous synteny
+blocks </a> which can be found in the genomes of the species <i>Homo
+sapiens</i> and <i>Mus musculus</i>. <b>Cassis</b> was also used to process a
+list of <a href="CassisAndMauve.html">LCBs produced by Mauve</a> for the
+genomes of the species <i>Homo sapiens</i> and <i>Mus musculus</i>.</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To facilitate the discussion, we adopted the
+following names for the different data sets:
+<ul>
+  <li> <tt>G</tt> - One-to-one orthologous genes (Ensembl)
+  <a href="HumanVsMouse.html">[Results]</a>
+  <li> <tt>B</tt> - One-to-one orthologous synteny blocks (Ensembl -
+  <b>Compara</b> database) <a href="CassisAndCompara.html">[Results]</a>
+  <li> <tt>M</tt> - <b>Mauve</b>'s LCBs
+  <a href="CassisAndMauve.html">[Results]</a>
+</ul>
+</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Table 1 shows the minimum, maximum, mean and
+median breakpoint lengths obtained by <b>Cassis</b>, before and after the
+segmentation step, while processing the sets <tt>G</tt>, <tt>B</tt> and <tt>M</tt>.</p>
+
+<center>
+<b>Table 1: Minimum, maximum, mean and median breakpoint length before and
+after the segmentation obtained for each one of the different testing sets.</b>
+<table border="1" cellspacing="0" cellpadding="2">
+<tr align="center">
+  <td rowspan="2"><b>Description</b></td>
+  <td rowspan="2"><b>N</b></td>
+  <td colspan="4"><b>Before segmentation [length in bp]</b></td>
+  <td colspan="4"><b>After segmentation  [length in bp]</b></td>
+</tr>
+<tr align="center">
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+</tr>
+<tr align="center">
+  <td><tt>G</tt> - Genes</td>
+  <td><tt>369</tt></td>
+  <td><tt>1</tt></td>
+  <td><tt>32,752,838</tt></td>
+  <td><tt>771,401</tt></td>
+  <td><tt>244,568</tt></td>
+  <td><tt>21</tt></td>
+  <td><tt>5,133,352</tt></td>
+  <td><tt>201,251</tt></td>
+  <td><tt>52,986</tt></td>
+</tr>
+<tr align="center">
+  <td><tt>B</tt> - Synteny blocks</td>
+  <td><tt>234</tt></td>
+  <td><tt>1</tt></td>
+  <td><tt>15,172,525</tt></td>
+  <td><tt>463,422</tt></td>
+  <td><tt>114,679</tt></td>
+  <td><tt>21</tt></td>
+  <td><tt>4,238,335</tt></td>
+  <td><tt>163,619</tt></td>
+  <td><tt>65,865</tt></td>
+</tr>
+<tr align="center">
+  <td><tt>M</tt> - Mauve's LCBs</td>
+  <td><tt>649</tt></td>
+  <td><tt>2</tt></td>
+  <td><tt>29,940,399</tt></td>
+  <td><tt>311,898</tt></td>
+  <td><tt>59,543</tt></td>
+  <td><tt>6</tt></td>
+  <td><tt>11,577,359</tt></td>
+  <td><tt>177,551</tt></td>
+  <td><tt>51,471</tt></td>
+</tr>
+</table>
+</center>
+<br>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If we look at the breakpoint lengths before
+the segmentation step, we can see that set <tt>G</tt> has an average
+length bigger than the ones observed with the other two sets. This
+is explained by the fact that, when <b>Cassis</b> uses a list of genes to
+define the breakpoints, it anchors their boundaries on the orthologous genes.
+In the sets <tt>B</tt> and <tt>G</tt>, the limits of the breakpoints are
+obtained based on information about sequence similarity (which is not anchored
+on the extremities of the genes).</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;As a consequence of this, we can see in
+Table 1 that, before the segmentation, set <tt>G</tt> has breakpoints
+which are substantially bigger than the ones which are obtained with the
+other two sets. However, we can see also that after the segmentation step,
+the mean and, specially, the median length of the breakpoints in the set
+<tt>G</tt> are much closer to the ones obtained in sets <tt>B</tt> and
+<tt>M</tt>.</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Due to the fact that the sets <tt>B</tt> and
+<tt>M</tt> have smaller breakpoints than set <tt>G</tt>, it was to be expected
+that the number of breakpoints which cannot be narrowed by <b>Cassis</b> in
+these sets should be bigger than the number for set <tt>G</tt> (see
+Table 2).</p>
+
+<center>
+<b>Table 2: Minimum, maximum, mean and median length of the breakpoints which
+had their length increased after the segmentation on each one of the testing
+sets.</b>
+<table border="1" cellspacing="0" cellpadding="2">
+<tr align="center">
+  <td rowspan="2"><b>Description</b></td>
+  <td rowspan="2"><b>N</b></td>
+  <td colspan="4"><b>Before segmentation [length in bp]</b></td>
+  <td colspan="4"><b>After segmentation  [length in bp]</b></td>
+</tr>
+<tr align="center">
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+</tr>
+<tr align="center">
+  <td><tt>G</tt> - Genes</td>
+  <td><tt>25</tt></td>
+  <td><tt>1</tt></td>
+  <td><tt>5,115,573</tt></td>
+  <td><tt>282,827</tt></td>
+  <td><tt>34,067</tt></td>
+  <td><tt>1,539</tt></td>
+  <td><tt>5,133,352</tt></td>
+  <td><tt>311,471</tt></td>
+  <td><tt>51,645</tt></td>
+</tr>
+<tr align="center">
+  <td><tt>B</tt> - Synteny blocks</td>
+  <td><tt>83</tt></td>
+  <td><tt>1</tt></td>
+  <td><tt>543,101</tt></td>
+  <td><tt>70,602</tt></td>
+  <td><tt>24,923</tt></td>
+  <td><tt>21</tt></td>
+  <td><tt>543,249</tt></td>
+  <td><tt>77,229</tt></td>
+  <td><tt>33,298</tt></td>
+</tr>
+<tr align="center">
+  <td><tt>M</tt> - Mauve's LCBs</td>
+  <td><tt>118</tt></td>
+  <td><tt>49</tt></td>
+  <td><tt>1,280,914</tt></td>
+  <td><tt>49,899</tt></td>
+  <td><tt>11,688</tt></td>
+  <td><tt>1,323</tt></td>
+  <td><tt>1,298,477</tt></td>
+  <td><tt>100,421</tt></td>
+  <td><tt>78,253</tt></td>
+</tr>
+</table>
+</center>
+<br>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Out of the <tt>83</tt> breakpoints from
+<b>Compara</b> blocks which were not reduced by <b>Cassis</b>, only 28 have
+their length extended by more than <tt>1</tt> kbp after the <b>Cassis</b>
+refinement step. Thus, only for a minority of the <b>Compara</b> breakpoints
+does <b>Cassis</b> worsen substantially the resolution of breakpoints (<a
+href="refinement-histogram-blocs.png">see the
+histogram of the breakpoints size differences</a>).</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Concerning the <b>Mauve</b> breakpoints,
+still <tt>113</tt> out of the <tt>118</tt> breakpoints have their length
+extended by more than <tt>1</tt> kbp (<a
+href="refinement-histogram-mauve.png">see the histogram of the
+breakpoints size differences</a>). However, we can note that almost half of
+them (<tt>52</tt>) are defined at least on one side by a LCB less than
+<tt>10</tt> kbp in size, suggesting that these breakpoints may not be reliable.</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;On the other hand, since the synteny blocks
+(or LCBs) are built based on information about sequence similarity, it was
+also to be expected that <b>Cassis</b> would not be able to refine a large
+number of the breakpoints in sets <tt>B</tt> and <tt>M</tt>. However, we can
+see in Table 3 that most of the breakpoints of the sets <tt>B</tt> and <tt>M</tt> were refined by <b>Cassis</b>.</p>
+
+<center>
+<b>Table 3: Minimum, maximum, mean and median length of the breakpoints which
+had their length decreased after the segmentation on each one of the testing
+sets.</b>
+<table border="1" cellspacing="0" cellpadding="2">
+<tr align="center">
+  <td rowspan="2"><b>Description</b></td>
+  <td rowspan="2"><b>N</b></td>
+  <td colspan="4"><b>Before segmentation [length in bp]</b></td>
+  <td colspan="4"><b>After segmentation  [length in bp]</b></td>
+  <td colspan="4"><b>Length reduction [%]</b></td>
+</tr>
+<tr align="center">
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+</tr>
+<tr align="center">
+  <td><tt>G</tt> - Genes</td>
+  <td><tt>340</tt></td>
+  <td><tt>303</tt></td>
+  <td><tt>32,752,838</tt></td>
+  <td><tt>811,739</tt></td>
+  <td><tt>256,577</tt></td>
+  <td><tt>21</tt></td>
+  <td><tt>4,860,908</tt></td>
+  <td><tt>195,085</tt></td>
+  <td><tt>54,883</tt></td>
+  <td><tt>0.31</tt></td>
+  <td><tt>99.99</tt></td>
+  <td><tt>62.26</tt></td>
+  <td><tt>71.20</tt></td>
+</tr>
+<tr align="center">
+  <td><tt>B</tt> - Synteny blocks</td>
+  <td><tt>124</tt></td>
+  <td><tt>848</tt></td>
+  <td><tt>15,172,525</tt></td>
+  <td><tt>792,470</tt></td>
+  <td><tt>251,879</tt></td>
+  <td><tt>174</tt></td>
+  <td><tt>4,238,335</tt></td>
+  <td><tt>223,386</tt></td>
+  <td><tt>73,567</tt></td>
+  <td><tt>0.25</tt></td>
+  <td><tt>99.86</tt></td>
+  <td><tt>57.30</tt></td>
+  <td><tt>61.32</tt></td>
+</tr>
+<tr align="center">
+  <td><tt>M</tt> - Mauve's LCBs</td>
+  <td><tt>464</tt></td>
+  <td><tt>2,143</tt></td>
+  <td><tt>29,940,399</tt></td>
+  <td><tt>416,414</tt></td>
+  <td><tt>98,389</tt></td>
+  <td><tt>6</tt></td>
+  <td><tt>11,577,359</tt></td>
+  <td><tt>217,385</tt></td>
+  <td><tt>48,285</tt></td>
+  <td><tt>0.01</tt></td>
+  <td><tt>99.98</tt></td>
+  <td><tt>41.22</tt></td>
+  <td><tt>35.02</tt></td>
+</tr>
+</table>
+</center>
+<br>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;By definition, the blocks produced by
+<b>Mauve</b> do not overlap themselves. This is a good property when we desire
+to use a list of synteny blocks as input for <b>Cassis</b>. For example, of
+the <tt>345</tt> synteny blocks extracted from the <b>Compara</b> database,
+<tt>88</tt> of them overlap in the mouse genome. Based on the
+<tt>345</tt> blocks, Cassis identified <tt>292</tt> breakpoints, but
+<tt>58</tt> of them could not be processed by the segmentation step because
+their lengths are smaller that the allowed limit (evidence of big overlapping).</p>
+
+<!-- ---------------------------------------------------------------------- -->
+<br><h3>4 - Download</h3>
+<ul>
+  <li><a href="MauveBlocks.txt">MauveBlocks.txt</a>
+  - List of <b>Mauve</b>'s LCBs.
+  <li><a href="NonRefinedBreakpoints_mauve.txt">NonRefinedBreakpoints.txt</a>
+  - List of breakpoints, which are identified with the LCBs, before the segmentation.
+  <li><a href="segmentation_mauve.txt">segmentation.txt</a>
+  - List of breakpoints, which are identified with the LCBs, after the segmentation.
+</ul>
+</p>
+
+</body>
+</html>

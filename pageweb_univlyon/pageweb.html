@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<!-- ---------------------------------------------------------------------- -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<title>
+Cassis: Detection of genomic rearrangement breakpoints
+</title>
+</head>
+
+<body>
+<!-- ---------------------------------------------------------------------- -->
+<h2><b>Cassis:</b> <i>Detection of genomic rearrangement breakpoints</i>
+<br></h2>
+
+<hr>
+
+<p>The package <b>Cassis</b> implements methods for precise detection
+of genomic rearrangement breakpoints, which were described in Lemaitre <i>et
+al.</i>, 2008 [3].</p>
+
+<!-- ---------------------------------------------------------------------- -->
+<hr>
+
+<h3><a name="requirements">1 - Requirements</a></h3>
+
+<ul>
+ <li>Linux or Mac OS</li>
+ <li>Perl 5</li>
+ <li><a name="rproject"></a><a href="http://www.r-project.org/">R</a></li>
+ <li>Ghostscript (the command bitmap (<a name="rproject"></a><a href="http://www.r-project.org/">R</a>) is used to create png images requires ghostscript)</li>
+ <li><a name="lastz">LASTZ</a>&nbsp;(<a href="http://www.bx.psu.edu/miller_lab/">CCGB: Miller Lab</a>)</li>
+</ul>
+
+<!-- ---------------------------------------------------------------------- -->
+<hr>
+
+<h3><a name="download">2 - Download</a></h3>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The package is free and licensed under the
+ <a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License</a>.
+
+</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The package can be downloaded here:
+ <a href="http://pbil.univ-lyon1.fr/software/Cassis/cassis.zip">cassis.zip</a>
+
+<!-- ---------------------------------------------------------------------- -->
+</p><hr>
+<h3><a name="installation">3 - Installation instructions</a></h3>
+
+<ol>
+  <a name="installation"></a>  
+  <li><p><a href="http://pbil.univ-lyon1.fr/software/Cassis/cassis.zip">
+  Download the package</a></p></li>
+  
+  <li><p><a>Unzip the downloaded file <b>cassis.zip</b><br>
+  <font color="blue">&gt; unzip cassis.zip</font><br>
+  This command will create a directory named <i>cassis</i> which
+  contains all package scripts.</p></li>
+  
+  <li><p><a href="http://www.bx.psu.edu/miller_lab/">Download LASTZ</a>
+  </p></li>
+  
+  <li><p>Compile LASTZ and copy the generated executable file
+  (<b>lastz</b>) to the directory <i>cassis/lastz</i>.</p></li>
+  
+  <li><p><a href="http://www.r-project.org/">Download and Install R</a>
+  </p></li>
+</ol>
+
+<!-- ---------------------------------------------------------------------- -->
+<hr>
+<h3><a name="documentation">4 - Software documentation</a></h3>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The documentation with description of
+the methods can be downloaded here:
+<a href="http://pbil.univ-lyon1.fr/software/Cassis/cassis_manual.pdf">
+cassis_manual.pdf</a> (<i>Last update: 25/02/2013.</i>)
+
+<!-- ---------------------------------------------------------------------- -->
+<hr>
+<h3><a name="casestudy">5 - Case study - Running cassis with <i>Homo
+sapiens</i> and <i>Mus musculus</i> orthologous genes</a></h3>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To demonstrate the advantages of
+<b>Cassis</b>, we conducted an experiment with a real data set.</b>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We obtained from Ensembl the list of
+one-to-one orthologous genes which are found in the genomes of <i>Homo
+sapiens</i> and <i>Mus musculus</i> and we used it as input for our
+package.</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./HumanVsMouse.html">Here</a> you can
+access the results of this study.</p>
+
+<!-- ---------------------------------------------------------------------- -->
+<hr>
+<h3><a name="othermethods">6 - Running cassis with orthologous synteny blocks</a></h3>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Cassis</b> incorporated the option
+of processing lists of orthologous synteny blocks. With this feature, we can
+process the list of synteny blocks produced by other methods and,
+consequently, identify and refine the breakpoints.</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To illustrate this functionality, we processed
+two different sets of orthologous synteny blocks (<i>Homo sapiens</i> and
+<i>Mus musculus</i>):</p>
+
+<ul>
+  <li> <a href="CassisAndCompara.html">Compara database</a>
+  <li> <a href="CassisAndMauve.html">Mauve</a>
+</ul>
+
+<!-- ---------------------------------------------------------------------- -->
+<hr>
+<h3><a name="casestudy">7 - Comparing Cassis with other methods for detecting
+breakpoints</a></h3>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;As far as we know, the current methods for
+detecting breakpoints (<b>Mauve</b> [1], <b>GRIMM-synteny</b>[5],
+<b>Magic</b> [6], etc.) are in fact procedures for detecting synteny blocks.
+The breakpoint regions are provided as a byproduct, simply by identifying
+intervals which are not covered by the synteny blocks. The method implemented
+in <b>Cassis</b> aims to go one step further and to extend the synteny blocks
+by focusing on the breakpoints themselves.</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="./Comparison.html">Here</a> we
+present a comparison between the results of the executions of <b>Cassis</b>
+with one-to-one orthologous genes and one-to-one orthologous synteny blocks
+(<b>Compara</b> and <b>Mauve</b>) and we show that <b>Cassis</b> is able to
+refine substantially the breakpoint locations.</p>
+
+<!-- ---------------------------------------------------------------------- -->
+</p><hr>
+<h3><a name="references">References</a></h3>
+<ol>
+  <li><p>Darling A. C. E., Mau B., Blattner F. R., and Perna N. T. (2004).
+  <b>Mauve: Multiple Alignment of Conserved Genomic Sequence With
+  Rearrangements</b>. <i>Genome Research</i>, <b>14</b>, 1394-1403</p></li>
+
+  <li><p>Lemaitre, C. (2008),
+  <a href="http://tel.archives-ouvertes.fr/tel-00364265/fr/">
+  R&eacute;arrangements chromosomiques dans les g&eacute;nomes de
+  mammif&egrave;res: caract&eacute;risation des points de cassure</a>.
+  Ph.D thesis, Universit&eacute; Claude Bernard - Lyon 1, 180 pages,
+  In French.</p></li>
+
+  <li><p>Lemaitre, C., Tannier, E., Gautier, C., and Sagot, M.-F. (2008).
+  <a href="http://www.biomedcentral.com/1471-2105/9/286">Precise detection
+  of rearrangement breakpoints in mammalian chromosomes</a>.
+  <i>BMC Bioinformatics</i>, <b>9</b>(286), 15 pages.</p></li>
+  
+  <li><p>Harris, R. S. (2007). <b>Improved pairwise alignment of genomic
+  DNA</b>. Ph.D thesis. The Pennsylvania State University, 84 pages.</p></li>
+
+  <li><p>Pevzner P. and Tesler G. (2003).
+  <b>Genome rearrangements in mammalian evolution: lessons from human and
+  mouse genomes</b>. <i>Genome Research</i>, <b>13</b>, 37-45.</p></li>
+
+  <li><p>Swidan F., Rocha E. P. C., Shmoish M., and Pinter R. Y. (2006).
+  <b>An Integrative Method for Accurate Comparative Genome Mapping</b>.
+  <i>PLoS Computational Biology</i>, <b>2</b>(8), 16 pages.</p></li>
+
+</ol>
+<br><br>
+<i>Last update: 25/02/2013.</i>
+</body>
+
+</html>

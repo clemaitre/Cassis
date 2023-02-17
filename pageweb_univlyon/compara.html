@@ -1,0 +1,362 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<!-- ---------------------------------------------------------------------- -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<title>
+Cassis: Detection of genomic rearrangement breakpoints
+</title>
+</head>
+
+<body>
+<!-- ---------------------------------------------------------------------- -->
+<h2><b>Cassis:</b> <i>Detection of genomic rearrangement breakpoints</i>
+<br></h2>
+<hr>
+<h3>Using Cassis with synteny blocks from <b>Compara</b> database</h3>
+
+<!-- ---------------------------------------------------------------------- -->
+<h3>1 - Input data</h3>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To execute this comparison, we obtained
+all necessary information from the
+<a href="http://www.ensembl.org/index.html">Ensembl Genome Brower</a> site
+(<b>Build 57</b>).</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The <b>Build 57</b> was released in March
+3rd, 2010 and contains information about the <i>Homo sapiens</i>
+assembly <b>GRCh37</b> (released in February 2009) and about the <i>Mus
+musculus</i> assembly <b>NCBI m37</b> (released in April 2007).
+</p>
+
+<ol>
+  <li><b>FASTA sequences</b>
+  <p>The FASTA sequences of the chromosomes 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
+  12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22 and X of the <i>Homo sapiens</i>
+  and of the chromosomes 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+  16, 17, 18, 19 and X of the <i>Mus musculus</i> were downloaded from the
+  Ensembl FTP site:
+  <ul>
+    <li>
+    <a href="ftp://ftp.ensembl.org/pub/current_fasta/homo_sapiens/dna/">
+    <i>Homo sapiens</i>
+    </li>
+    <li>
+    <a href="ftp://ftp.ensembl.org/pub/current_fasta/mus_musculus/dna/">
+    <i>Mus musculus</i></a>
+    </li>
+  </ul>
+  <br>
+  We downloaded the FASTA files which contains the chromosome sequences
+  after being processed by RepeatMasker (dna_rm).<br>
+  All files are renamed according to the pattern:
+  <tt>[chromosome_name].fasta</tt>
+  (Example: <tt>1.fasta</tt>, <tt>2.fasta</tt>, <tt>X.fasta</tt>, etc.)
+  </p>
+
+ <li><b>Orthologous synteny blocks</b>
+  <p>We downloaded some mysql table dumps of the
+  <a href="ftp://ftp.ensembl.org/pub/current_mysql/ensembl_compara_57/">
+  Compara database</a> (<tt>dnafrag.onlychromosome.txt</tt>,
+  <tt>dnafrag_region.txt</tt> and,
+  <tt>synteny_region.txt</tt>) and we processed these files to obtain the list
+  of orthologous synteny blocks.<br>
+  <a href="./HomoSapiensMusMusculus_blocks.txt">Download the list of
+  orthologous synteny blocks</a>
+  </p>
+</ol>
+</p>
+
+
+<!-- ---------------------------------------------------------------------- -->
+<br><h3>2 - Results</h3>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The Compara database has <tt>345</tt>
+orthologous synteny blocks identified in the genomes of <i>Homo sapiens</i>
+and <i>Mus musculus</i>. Table 1 shows the minimum, maximum, mean and median
+length of these blocks.</p>
+
+<center>
+<b>Table 1: <i>Homo sapiens</i> and <i>Mus musculus</i> synteny blocks
+extracted from the Ensembl's Compara database</b>
+<table border="1" cellspacing="0" cellpadding="2">
+<tr align="center">
+  <td rowspan="2"><b>Description</b></td>
+  <td rowspan="2"><b>N</b></td>
+  <td colspan="4"><b><i>Homo sapiens</i> [length in bp]</b></td>
+  <td colspan="4"><b><i>Mus musculus</i>  [length in bp]</b></td>
+</tr>
+<tr align="center">
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+</tr>
+<tr align="center">
+  <td>Compara database</td>
+  <td><tt>345</tt></td>
+  <td><tt>108,946</tt></td>
+  <td><tt>58,118,452</tt></td>
+  <td><tt>7,844,447</tt></td>
+  <td><tt>3,697,691</tt></td>
+  <td><tt>102,552</tt></td>
+  <td><tt>52,624,330</tt></td>
+  <td><tt>7,077,399</tt></td>
+  <td><tt>3,172,511</tt></td>
+</tr>
+</table>
+</center>
+<br>
+
+
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;By processing these synteny blocks,
+<b>Cassis</b> identified <tt>292</tt> breakpoints. A total of <tt>234</tt>
+breakpoints can be processed by the segmentation process while the remaining
+<tt>58</tt> cannot because they do not meet the minimum length of <tt>50,000
+bp</tt> (caused by synteny block overlapping). Table 2 shows the distribution
+of the <tt>292</tt> identified breakpoints according to their
+classification.</p>
+
+<center>
+<b>Table 2: Distribution of the <tt>292</tt> identified breakpoints
+according to their classification</b>
+<table border="1" cellspacing="0" cellpadding="2">
+<tr align="center">
+  <td><b>Description</b></td>
+  <td><b>Status</b></td>
+  <td><b>Number of breakpoints</b></td>
+</tr>
+<tr align="center">
+  <td align="left">Sequences S<sub>R</sub>, S<sub>A</sub> and,
+    S<sub>B</sub> have their lengths bigger than the minimum limit.</td>
+  <td><tt>1</tt></td>
+  <td><tt>234</tt></td>
+</tr>
+<tr align="center">
+  <td align="left">Sequence S<sub>A</sub> is smaller than the allowed
+    limit.</td>
+  <td><tt>-3</tt></td>
+  <td><tt>27</tt></td>
+</tr>
+<tr align="center">
+  <td align="left">Sequence S<sub>B</sub> is smaller than the allowed
+    limit.</td>
+  <td><tt>-4</tt></td>
+  <td><tt>22</tt></td>
+</tr>
+<tr align="center">
+  <td align="left">Sequences S<sub>A</sub> and S<sub>B</sub> are smaller than
+    the allowed limit.</td>
+  <td><tt>-5</tt></td>
+  <td><tt>9</tt></td>
+</tr>
+</table>
+</center>
+<br>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The <tt>234</tt> breakpoints which have
+sequences S<sub>R</sub>, S<sub>A</sub> and, S<sub>B</sub> with length bigger
+than or equal to <tt>50,000 bp</tt> were processed by the segmentation step.
+Table 3 shows the minimum, maximum, mean and median breakpoint length before
+and after the segmentation process. It also shows the number of breakpoints
+which received status <tt>1</tt>, <tt>0</tt> or, <tt>-1</tt> (passed
+(<tt>1</tt>) or failed (<tt>0</tt>) in the statistical test that evaluates the
+significance of the segmentation or had no hits (<tt>-1</tt>) on the
+alignments of the sequences S<sub>R</sub> against S<sub>A</sub> and
+S<sub>R</sub> against S<sub>B</sub>).
+
+<center>
+<b>Table 3: Minimum, maximum, mean and median breakpoint length before and
+after the segmentation</b>
+<table border="1" cellspacing="0" cellpadding="2">
+<tr align="center">
+  <td rowspan="2"><b>Description</b></td>
+  <td rowspan="2"><b>N</b></td>
+  <td colspan="4"><b>Before segmentation [length in bp]</b></td>
+  <td colspan="4"><b>After segmentation  [length in bp]</b></td>
+</tr>
+<tr align="center">
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+</tr>
+<tr align="center">
+  <td>All breakpoints</td>
+  <td><tt>234</tt></td>
+  <td><tt>1</tt></td>
+  <td><tt>15,172,525</tt></td>
+  <td><tt>463,422</tt></td>
+  <td><tt>114,679</tt></td>
+  <td><tt>21</tt></td>
+  <td><tt>4,238,335</tt></td>
+  <td><tt>163,619</tt></td>
+  <td><tt>65,865</tt></td>
+</tr>
+<tr align="center">
+  <td>Status = 1 </td>
+  <td><tt>207</tt></td>
+  <td><tt>1</tt></td>
+  <td><tt>15,172,525</tt></td>
+  <td><tt>503,025</tt></td>
+  <td><tt>124,520</tt></td>
+  <td><tt>21</tt></td>
+  <td><tt>4,238,335</tt></td>
+  <td><tt>164,782</tt></td>
+  <td><tt>53,257</tt></td>
+</tr>
+<tr align="center">
+  <td>Status = 0</td>
+  <td><tt>26</tt></td>
+  <td><tt>1,386</tt></td>
+  <td><tt>521,357</tt></td>
+  <td><tt>160,279</tt></td>
+  <td><tt>77,096</tt></td>
+  <td><tt>14,773</tt></td>
+  <td><tt>532,964</tt></td>
+  <td><tt>154,983</tt></td>
+  <td><tt>100,582</tt></td>
+</tr>
+<tr align="center">
+  <td>Status = -1</td>
+  <td><tt>1</tt></td>
+  <td><tt>147,243</tt></td>
+  <td><tt>147,243</tt></td>
+  <td><tt>147,243</tt></td>
+  <td><tt>147,243</tt></td>
+  <td><tt>147,243</tt></td>
+  <td><tt>147,243</tt></td>
+  <td><tt>147,243</tt></td>
+  <td><tt>147,243</tt></td>
+</tr>
+</table>
+</center>
+<br>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Of the <tt>234</tt> breakpoints which were
+classified with status <tt>1</tt>, a total of <tt>83</tt> breakpoints had
+their length increased after the segmentation. Table 4 shows the minimum,
+maximum, mean and median length of these breakpoints, before and after the
+segmentation process.</p>
+
+<center>
+<b>Table 4: Minimum, maximum, mean and median length of the <tt>83</tt>
+breakpoints which had their length increased after the segmentation</b>
+<table border="1" cellspacing="0" cellpadding="2">
+<tr align="center">
+  <td rowspan="2"><b>Description</b></td>
+  <td rowspan="2"><b>N</b></td>
+  <td colspan="4"><b>Before segmentation [length in bp]</b></td>
+  <td colspan="4"><b>After segmentation  [length in bp]</b></td>
+</tr>
+<tr align="center">
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+</tr>
+<tr align="center">
+  <td>Length (after) &ge; Length (before)</td>
+  <td><tt>83</tt></td>
+  <td><tt>1</tt></td>
+  <td><tt>543,101</tt></td>
+  <td><tt>70,602</tt></td>
+  <td><tt>24,923</tt></td>
+  <td><tt>21</tt></td>
+  <td><tt>543,249</tt></td>
+  <td><tt>77,229</tt></td>
+  <td><tt>33,298</tt></td>
+</tr>
+</table>
+</center>
+<br>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A total of <tt>124</tt> breakpoints were
+classified with status <tt>1</tt> and had their length decreased after the
+segmentation process. Table 5 shows the minimum, maximum, mean and median
+length of these breakpoints, before and after the segmentation process.</p>
+
+<center>
+<b>Table 5: Minimum, maximum, mean and median length of the <tt>124</tt>
+breakpoints which had their length decreased after the segmentation</b>
+<table border="1" cellspacing="0" cellpadding="2">
+<tr align="center">
+  <td rowspan="2"><b>Description</b></td>
+  <td rowspan="2"><b>N</b></td>
+  <td colspan="4"><b>Before segmentation [length in bp]</b></td>
+  <td colspan="4"><b>After segmentation  [length in bp]</b></td>
+  <td colspan="4"><b>Length reduction [%]</b></td>
+</tr>
+<tr align="center">
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+</tr>
+<tr align="center">
+  <td>Length (after) < Length (before)</td>
+  <td><tt>124</tt></td>
+  <td><tt>848</tt></td>
+  <td><tt>15,172,525</tt></td>
+  <td><tt>792,470</tt></td>
+  <td><tt>251,879</tt></td>
+  <td><tt>174</tt></td>
+  <td><tt>4,238,335</tt></td>
+  <td><tt>223,386</tt></td>
+  <td><tt>73,567</tt></td>
+  <td><tt>0.25</tt></td>
+  <td><tt>99.86</tt></td>
+  <td><tt>57.30</tt></td>
+  <td><tt>61.32</tt></td>
+</tr>
+</table>
+</center>
+<br>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Figure 1 shows the histogram of the
+differences of the breakpoint lengths, before and after the segmentation step,
+for the <tt>202</tt> breakpoints which were classified with status <tt>1</tt>.</p>
+
+<center>
+<b>Figure 1: Histogram of the breakpoint size differences between "before"
+and "after" the refinement step of Cassis applied to Ensembl synteny blocs.<br>
+(5 values larger than 5 Mbp have been removed for the purpose of
+readability)</b><br>
+<img src="refinement-histogram-blocs.png" border="1">
+</center>
+
+<!-- ---------------------------------------------------------------------- -->
+<br><h3>3 - Download</h3>
+<ul>
+  <li><a href="NonRefinedBreakpoints_blocks.txt">NonRefinedBreakpoints.txt</a>
+  - List of breakpoints before the segmentation.
+  <li><a href="segmentation_blocks.txt">segmentation.txt</a>
+  - List of breakpoints after the segmentation.
+</ul>
+</p>
+
+</body>
+
+</html>

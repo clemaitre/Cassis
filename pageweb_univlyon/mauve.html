@@ -1,0 +1,343 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<!-- ---------------------------------------------------------------------- -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<title>
+Cassis: Detection of genomic rearrangement breakpoints
+</title>
+</head>
+
+<body>
+<!-- ---------------------------------------------------------------------- -->
+<h2><b>Cassis:</b> <i>Detection of genomic rearrangement breakpoints</i>
+<br></h2>
+
+<!-- ---------------------------------------------------------------------- -->
+<hr><h3>Using Cassis with LCBs produced by <b>Mauve</b></h3>
+
+<!-- ---------------------------------------------------------------------- -->
+<h3>1 - Input data</h3>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
+href="http://asap.ahabs.wisc.edu/software/mauve/overview.html">Mauve</a> is
+able to work with multiple genomes but <b>Cassis</b> works with just a pair of genomes. Thus, to perform a comparative study, we decided to use <b>Mauve</b> to obtain the list of LCBs which can be found in the genomes of <i>Homo sapiens</i> and <i>Mus musculus</i>.</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To do this, we adopted the same parameters
+used by <b>Mauve</b>'s authors in the study of the human, mouse and rat
+genomes.</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;We produced two FASTA files (one for the
+human and other for the mouse genome) containing the sequences of all
+chromosomes (except chromosome Y) and we executed the following command
+line:</p>
+<center><tt>mauveAligner --output=output.mauve --no-recursion --seed-size=31
+--weigth=90 Human.fasta Human.sml Mouse.fasta Mouse.sml</tt></center>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Mauve</b> concatenates the sequences that
+are inside of a FASTA file into a single sequence. Thus, it performed the
+analysis of two sequences with, respectively, <tt>3,036,303,846</tt> bp for
+the human genome and <tt>2,638,992,663</tt> bp for the mouse genome. The
+parameter <tt>--seed-size</tt> defines the minimum anchor length and the
+parameter <tt>--weight</tt> determines the minimum weight for the LCBs. The
+parameter <tt>--no-recursion</tt> turns off the full alignment of the LCBs.
+Finally, the files Human.sml and Mouse.sml correspond to the Sorted Mer Lists
+which are used by the algorithm (if they do not exist, the program creates
+them).</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In the output produced by <b>Mauve</b> (file
+output.mauve), we found the definition of <tt>2022</tt> intervals. From this
+set of intervals, we could identify <tt>674</tt> LCBs which have fragments
+that are shared by both genomes. From this set of LCBs, we discarded two LCBs
+which contain the intervals of different chromosomes in the same genome: one
+LCB contains the end of chromosome 10 and the beginning of  chromosome
+11 and the other contains the end of chromosome 14 and the beginning of 
+chromosome 15 (both in the human genome). Table 1 summarises the minimum,
+maximum, mean and median length of these LCBs.</p>
+
+<center>
+<b>Table 1: LCBs found by Mauve in the <i>Homo sapiens</i> and <i>Mus
+musculus</i> genomes</b>
+<table border="1" cellspacing="0" cellpadding="2">
+<tr align="center">
+  <td rowspan="2"><b>Description</b></td>
+  <td rowspan="2"><b>N</b></td>
+  <td colspan="4"><b><i>Homo sapiens</i> [length in bp]</b></td>
+  <td colspan="4"><b><i>Mus musculus</i>  [length in bp]</b></td>
+</tr>
+<tr align="center">
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+</tr>
+<tr align="center">
+  <td>"Good" LCBs</td>
+  <td><tt>672</tt></td>
+  <td><tt>98</tt></td>
+  <td><tt>58,978,356</tt></td>
+  <td><tt>3,964,687</tt></td>
+  <td><tt>717,051</tt></td>
+  <td><tt>98</tt></td>
+  <td><tt>48,176,114</tt></td>
+  <td><tt>3,588,420</tt></td>
+  <td><tt>545,930</tt></td>
+</tr>
+<tr align="center">
+  <td>Discarded</td>
+  <td><tt>2</tt></td>
+  <td><tt>17,532,868</tt></td>
+  <td><tt>71,148,726</tt></td>
+  <td><tt>44,340,797</tt></td>
+  <td><tt>44,340,797</tt></td>
+  <td><tt>15,457,004</tt></td>
+  <td><tt>43,737,829</tt></td>
+  <td><tt>29,597,416</tt></td>
+  <td><tt>29,597,416</tt></td>
+</tr>
+</table>
+</center>
+<br>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To perform a comparison, Table 2 shows the
+minimum, maximum, mean and median length of the synteny blocks extracted from
+the <b>Compara</b> database of Ensembl.</p>
+
+<center>
+<b>Table 2: <i>Homo sapiens</i> and <i>Mus musculus</i> synteny blocks
+extracted from the Ensembl's Compara database</b>
+<table border="1" cellspacing="0" cellpadding="2">
+<tr align="center">
+  <td rowspan="2"><b>Description</b></td>
+  <td rowspan="2"><b>N</b></td>
+  <td colspan="4"><b><i>Homo sapiens</i> [length in bp]</b></td>
+  <td colspan="4"><b><i>Mus musculus</i>  [length in bp]</b></td>
+</tr>
+<tr align="center">
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+</tr>
+<tr align="center">
+  <td>Compara database</td>
+  <td><tt>345</tt></td>
+  <td><tt>108,946</tt></td>
+  <td><tt>58,118,452</tt></td>
+  <td><tt>7,844,447</tt></td>
+  <td><tt>3,697,691</tt></td>
+  <td><tt>102,552</tt></td>
+  <td><tt>52,624,330</tt></td>
+  <td><tt>7,077,399</tt></td>
+  <td><tt>3,172,511</tt></td>
+</tr>
+</table>
+</center>
+<br>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Mauve</b> has almost twice more blocks
+than <b>Compara</b> and they are smaller than the ones from <b>Compara</b>.
+Moreover some blocks from <b>Mauve</b> are very small, with 111 (16.5%) blocks
+less than 5 Kbp.</p>
+
+<!-- ---------------------------------------------------------------------- -->
+<br><h3>2 - Results</h3>
+
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Cassis</b> was used to process the list of
+<tt>672</tt> LCBs which are defined by Mauve. Our package identified a total
+of <tt>649</tt> breakpoints and all of them were processed by the segmentation
+step. Table 3 shows the minimum, maximum, mean and median breakpoint length
+before and after the segmentation process. It also shows the number of
+breakpoints which received status <tt>1</tt> or <tt>0</tt> (respectively,
+passed or failed in the statistical test that evaluates the significance of
+the segmentation).</p>
+
+<center>
+<b>Table 3: Minimum, maximum, mean and median breakpoint length before and
+after the segmentation</b>
+<table border="1" cellspacing="0" cellpadding="2">
+<tr align="center">
+  <td rowspan="2"><b>Description</b></td>
+  <td rowspan="2"><b>N</b></td>
+  <td colspan="4"><b>Before segmentation [length in bp]</b></td>
+  <td colspan="4"><b>After segmentation  [length in bp]</b></td>
+</tr>
+<tr align="center">
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+</tr>
+<tr align="center">
+  <td>All breakpoints</td>
+  <td><tt>649</tt></td>
+  <td><tt>2</tt></td>
+  <td><tt>29,940,399</tt></td>
+  <td><tt>311,898</tt></td>
+  <td><tt>59,543</tt></td>
+  <td><tt>6</tt></td>
+  <td><tt>11,577,359</tt></td>
+  <td><tt>177,551</tt></td>
+  <td><tt>51,471</tt></td>
+</tr>
+<tr align="center">
+  <td>Status = 1 </td>
+  <td><tt>582</tt></td>
+  <td><tt>49</tt></td>
+  <td><tt>29,940,399</tt></td>
+  <td><tt>342,103</tt></td>
+  <td><tt>68,791</tt></td>
+  <td><tt>6</tt></td>
+  <td><tt>11,577,359</tt></td>
+  <td><tt>193,671</tt></td>
+  <td><tt>59,525</tt></td>
+</tr>
+<tr align="center">
+  <td>Status = 0</td>
+  <td><tt>67</tt></td>
+  <td><tt>2</tt></td>
+  <td><tt>699,084</tt></td>
+  <td><tt>49,516</tt></td>
+  <td><tt>12,765</tt></td>
+  <td><tt>78</tt></td>
+  <td><tt>697,008</tt></td>
+  <td><tt>37,527</tt></td>
+  <td><tt>14,388</tt></td>
+</tr>
+</table>
+</center>
+<br>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;From the <tt>582</tt> breakpoints which were
+classified with status <tt>1</tt>, a total of <tt>118</tt> breakpoints had
+their length increased after the segmentation. Table 4 shows the minimum,
+maximum, mean and median length of these breakpoints, before and after the
+segmentation process.</p>
+
+<center>
+<b>Table 4: Minimum, maximum, mean and median length of the <tt>118</tt>
+breakpoints which had their length increased after the segmentation</b>
+<table border="1" cellspacing="0" cellpadding="2">
+<tr align="center">
+  <td rowspan="2"><b>Description</b></td>
+  <td rowspan="2"><b>N</b></td>
+  <td colspan="4"><b>Before segmentation [length in bp]</b></td>
+  <td colspan="4"><b>After segmentation  [length in bp]</b></td>
+</tr>
+<tr align="center">
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+</tr>
+<tr align="center">
+  <td>Length (after) &ge; Length (before)</td>
+  <td><tt>118</tt></td>
+  <td><tt>49</tt></td>
+  <td><tt>1,280,914</tt></td>
+  <td><tt>49,899</tt></td>
+  <td><tt>11,688</tt></td>
+  <td><tt>1,323</tt></td>
+  <td><tt>1,298,477</tt></td>
+  <td><tt>100,421</tt></td>
+  <td><tt>78,253</tt></td>
+</tr>
+</table>
+</center>
+<br>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A total of <tt>464</tt> breakpoints were
+classified with status <tt>1</tt> and had their length decreased after the
+segmentation process. Table 5 shows the minimum, maximum, mean and median
+length of these breakpoints, before and after the segmentation process.</p>
+
+<center>
+<b>Table 5: Minimum, maximum, mean and median length of the <tt>464</tt>
+breakpoints which had their length decreased after the segmentation</b>
+<table border="1" cellspacing="0" cellpadding="2">
+<tr align="center">
+  <td rowspan="2"><b>Description</b></td>
+  <td rowspan="2"><b>N</b></td>
+  <td colspan="4"><b>Before segmentation [length in bp]</b></td>
+  <td colspan="4"><b>After segmentation  [length in bp]</b></td>
+  <td colspan="4"><b>Length reduction [%]</b></td>
+</tr>
+<tr align="center">
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+  <td><i>Min</i></td>
+  <td><i>Max</i></td>
+  <td><i>Mean</i></td>
+  <td><i>Median</i></td>
+</tr>
+<tr align="center">
+  <td>Length (after) < Length (before)</td>
+  <td><tt>464</tt></td>
+  <td><tt>2,143</tt></td>
+  <td><tt>29,940,399</tt></td>
+  <td><tt>416,414</tt></td>
+  <td><tt>98,389</tt></td>
+  <td><tt>6</tt></td>
+  <td><tt>11,577,359</tt></td>
+  <td><tt>217,385</tt></td>
+  <td><tt>48,285</tt></td>
+  <td><tt>0.01</tt></td>
+  <td><tt>99.98</tt></td>
+  <td><tt>41.22</tt></td>
+  <td><tt>35.02</tt></td>
+</tr>
+</table>
+</center>
+<br>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Figure 1 shows the histogram of the
+differences of the breakpoint lengths, before and after the segmentation step,
+for the <tt>579</tt> breakpoints which were classified with status <tt>1</tt>.</p>
+
+<center>
+<b>Figure 1: Histogram of the breakpoint size differences between "before" and
+"after" the refinement step of Cassis applied to Mauve blocks (LCB).<br>
+(3 values larger than 2 Mbp have been removed for the purpose of
+readability)</b><br>
+<img src="refinement-histogram-mauve.png" border="1">
+</center>
+<br>
+
+<!-- ---------------------------------------------------------------------- -->
+<br><h3>3 - Download</h3>
+<ul>
+  <li><a href="MauveBlocks.txt">MauveBlocks.txt</a>
+  - List of <b>Mauve</b>'s LCBs.
+  <li><a href="NonRefinedBreakpoints_mauve.txt">NonRefinedBreakpoints.txt</a>
+  - List of breakpoints, which are identified with the LCBs, before the segmentation.
+  <li><a href="segmentation_mauve.txt">segmentation.txt</a>
+  - List of breakpoints, which are identified with the LCBs, after the segmentation.
+</ul>
+</p>
+
+</body>
+</html>
