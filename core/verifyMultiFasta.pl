@@ -125,7 +125,7 @@ sub readMultiFasta {
   open(IN, "${fasta}") or die printUsage("Could not read the ${fasta}");
   while (my $line = <IN>) {
     $line =~ s/\s+//g;
-    if ($line !~ /^>/ && $nSequences == 1) {
+    if ($line !~ /^>/) {
       $length += length($line);
     } elsif ($line =~ /^>/) {
       if ($nSequences >0) {
@@ -135,6 +135,7 @@ sub readMultiFasta {
       # update length and chromosome name with next sequence
       $length = 0;
       ($current_name) = $line =~ /^>(.+)$/;
+      $current_name =~ tr/a-z/A-Z/;
       $nSequences++;
     }
   }

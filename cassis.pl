@@ -73,8 +73,8 @@ validateParameters();
 # 1st step: create the directory structure
 createWorkDirectories();
 
-# 2nd step: validate the FASTA directories
-validateFastaDirectories();
+# 2nd step: validate the FASTA directories or multi-fasta files
+validateGenomeFasta();
 
 # 3rd step: validate table of genes / synteny blocks
 validateInputTable();
@@ -398,9 +398,22 @@ sub validateParameters {
 
 	my $table   = fileExists( trim( $parameters[ $n - 5 ] ), \&printUsage );
 	my $type    = trim( $parameters[ $n - 4 ] );
-	my $dirGR   = directoryExists( trim( $parameters[ $n - 3 ] ), \&printUsage );
-	my $dirGO   = directoryExists( trim( $parameters[ $n - 2 ] ), \&printUsage );
+	my $dirGR   = trim( $parameters[ $n - 3 ] ); #note : can a directory or a file
+	my $dirGO   = trim( $parameters[ $n - 2 ] ); #
 	my $workDir = directoryExists( trim( $parameters[ $n - 1 ] ), \&printUsage );
+
+	if ( -d $dirGR && -d $dirGO ){
+		$PARAMETERS{"FASTATYPE"} = "DIR";
+		my $createFASTAScript = fileExists( "${Bin}/pipeline/createBreakpointFastas.pl", \&printUsage );
+		$ENVIRONMENT{"CREATEFASTA"}  = $createFASTAScript;
+	} elsif (-f $dirGR && -f $dirGO ) {
+		$PARAMETERS{"FASTATYPE"} = "MULTIFASTA";
+		my $createFASTAScript = fileExists( "${Bin}/pipeline/createBreakpointFastasWithMultiFasta.pl", \&printUsage );
+		$ENVIRONMENT{"CREATEFASTA"}  = $createFASTAScript;
+	} else {
+		printUsage("GR and GO are not either both directories or both files.");
+	}
+
 
 	if ( $type !~ /^[gGbB]$/ ) {
 		printUsage("Parameter <type> : Invalid value");
@@ -411,7 +424,7 @@ sub validateParameters {
 	# Mandatory parameters
 	$PARAMETERS{"TABLE"}   = $table;
 	$PARAMETERS{"TYPE"}    = $type;
-	$PARAMETERS{"DIRGR"}   = $dirGR;
+	$PARAMETERS{"DIRGR"}   = $dirGR; # note: can be a directory or a multi-fasta file
 	$PARAMETERS{"DIRGO"}   = $dirGO;
 	$PARAMETERS{"WORKDIR"} = $workDir;
 
@@ -518,8 +531,9 @@ sub validateParameters {
 sub verifyEnvironment {
 
 	my $verifyDirScript   = fileExists( "${Bin}/core/verifyFASTAdirectory.pl",       \&printUsage );
+	my $verifyFastaScript   = fileExists( "${Bin}/core/verifyMultiFasta.pl",       \&printUsage );
 	my $identifyScript    = fileExists( "${Bin}/core/identifyBreakpoints.pl",        \&printUsage );
-	my $createFASTAScript = fileExists( "${Bin}/pipeline/createBreakpointFastas.pl", \&printUsage );
+	#my $createFASTAScript = fileExists( "${Bin}/pipeline/createBreakpointFastas.pl", \&printUsage );
 	my $alignScript       = fileExists( "${Bin}/pipeline/alignBreakpointRegions.pl", \&printUsage );
 	my $dotplotScript = fileExists( "${Bin}/pipeline/dotplotBreakpointRegions.pl", \&printUsage );
 	my $segmentationScript =
@@ -538,8 +552,9 @@ sub verifyEnvironment {
 	}
 
 	$ENVIRONMENT{"VERIFYDIR"}    = $verifyDirScript;
+	$ENVIRONMENT{"VERIFYFASTA"}    = $verifyFastaScript;
 	$ENVIRONMENT{"IDENTIFY"}     = $identifyScript;
-	$ENVIRONMENT{"CREATEFASTA"}  = $createFASTAScript;
+	#$ENVIRONMENT{"CREATEFASTA"}  = $createFASTAScript;
 	$ENVIRONMENT{"ALIGN"}        = $alignScript;
 	$ENVIRONMENT{"DOTPLOT"}      = $dotplotScript;
 	$ENVIRONMENT{"SEGMENTATION"} = $segmentationScript;
@@ -596,32 +611,46 @@ sub createWorkDirectories {
 }
 
 ###############################################################################
-# This function validates the FASTA directories
-sub validateFastaDirectories {
+# This function validates the FASTA directories or multiFASTA files and creates temporary files with chromosome end positions
+sub validateGenomeFasta {
 
-	my $dirGR  = $PARAMETERS{"DIRGR"};
 	my $grFile = $PARAMETERS{"TMPDIR"} . "/" . rand() . time();
-
-	my $dirGO  = $PARAMETERS{"DIRGO"};
 	my $goFile = $PARAMETERS{"TMPDIR"} . "/" . rand() . time();
 
-	print "Reading FASTA directory (Genome GR)...\n";
-	system("perl $ENVIRONMENT{'VERIFYDIR'} ${dirGR} ${grFile}");
+	my $dirGR  = $PARAMETERS{"DIRGR"};  # note: can be a directory or a multi-fasta file
+	my $dirGO  = $PARAMETERS{"DIRGO"};
+	
+	if ( $PARAMETERS{"FASTATYPE"} eq "DIR"){
 
-	print "Reading FASTA directory (Genome GO)...\n";
-	system("perl $ENVIRONMENT{'VERIFYDIR'} ${dirGO} ${goFile}");
+		print "Reading FASTA directory (Genome GR)...\n";
+		system("perl $ENVIRONMENT{'VERIFYDIR'} ${dirGR} ${grFile}");
 
+		print "Reading FASTA directory (Genome GO)...\n";
+		system("perl $ENVIRONMENT{'VERIFYDIR'} ${dirGO} ${goFile}");
+
+	} else {
+
+		print "Reading FASTA file (Genome GR)...\n";
+		system("perl $ENVIRONMENT{'VERIFYFASTA'} ${dirGR} ${grFile}");
+
+		print "Reading FASTA file (Genome GO)...\n";
+		system("perl $ENVIRONMENT{'VERIFYFASTA'} ${dirGO} ${goFile}");
+	
+	}
+	
+	
 	if ( !-e $grFile || -s $grFile == 0 ) {
-		printErrorAndExit("Could not find any FASTA file inside of ${dirGR}");
+		printErrorAndExit("Could not find any FASTA entry inside ${dirGR}");
 	}
 
 	if ( !-e $goFile || -s $goFile == 0 ) {
-		printErrorAndExit("Could not find any FASTA file inside of ${dirGO}");
+		printErrorAndExit("Could not find any FASTA entry inside ${dirGO}");
 	}
-
+	
 	$PARAMETERS{"GRCHR"} = $grFile;
 	$PARAMETERS{"GOCHR"} = $goFile;
 }
+
 
 ###############################################################################
 # This function validates the input table
@@ -938,10 +967,18 @@ sub createBreakpointFASTAs {
 
 	my $breakpoints = $PARAMETERS{"BREAKPOINTTABLE"};
 	my $fastaDir    = $PARAMETERS{"FASTADIR"};
-	my $grFile      = $PARAMETERS{"GRCHR"};
-	my $goFile      = $PARAMETERS{"GOCHR"};
+	my $grFile;      
+	my $goFile;
 	my $script      = $ENVIRONMENT{"CREATEFASTA"};
-
+	
+	if ( $PARAMETERS{"FASTATYPE"} eq "DIR"){
+		$grFile = $PARAMETERS{"GRCHR"};
+		$goFile = $PARAMETERS{"GOCHR"};
+	} else{
+		$grFile = $PARAMETERS{"DIRGR"};
+		$goFile = $PARAMETERS{"DIRGO"};
+	}
+	
 	print "Creating sequences SR, SA and SB (FASTA files)...\n";
 	my $cmd = "perl ${script} ${breakpoints} ${grFile} ${goFile} ${fastaDir}";
 	system($cmd);

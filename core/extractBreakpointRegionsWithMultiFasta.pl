@@ -166,7 +166,7 @@ sub validateParameters {
   my @parameters = @ARGV;
   my $nParameters = @parameters;
   
-  if ($nParameters != 5) {
+  if ($nParameters != 4) {
     printUsage("Invalid number of parameters.");
   }
   
@@ -193,8 +193,8 @@ sub readMultiFastaAndCreateAllBreakpointFASTAs {
   my $nSequences = 0;
   my $current_name = "";
   my $current_sequence = "";
-  open(IN, "${fastaFile}") or die printUsage("Could not read the file ${fastaFile}");
-  while (my $line = <IN>) {
+  open(MAININ, "${fastaFile}") or die printUsage("Could not read the file ${fastaFile}");
+  while (my $line = <MAININ>) {
     $line =~ s/\s+//g;
     if ($line !~ /^>/) {
       $current_sequence .= $line;
@@ -206,10 +206,11 @@ sub readMultiFastaAndCreateAllBreakpointFASTAs {
     	# update sequence and chromosome name with next sequence
       $current_sequence = "";
       ($current_name) = $line =~ /^>(.+)$/;
+      $current_name =~ tr/a-z/A-Z/;
       $nSequences++;
     }
   }
-  close(IN);
+  close(MAININ);
   # Treat last sequence of the file
   createBreakpointFASTAs($current_name, $current_sequence);
 
